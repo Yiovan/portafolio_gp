@@ -14,7 +14,7 @@ export default function Footer() {
         <div className="footer__brand">
           <a href="#top" className="footer__logo" aria-label="MBareTech - volver al inicio">
             <span className="material-symbols-outlined icon-filled footer__logo-icon" aria-hidden="true">hub</span>
-            <span>MBareTech</span>
+            <span>TECHAURANDU</span>
           </a>
           <p className="footer__tagline">
             Soluciones Digitales y Tecnología Inteligente
@@ -33,7 +33,7 @@ export default function Footer() {
 
         <div className="footer__bottom">
           <span className="footer__copy">
-            {new Date().getFullYear()} MBareTech. Todos los derechos reservados.
+            {new Date().getFullYear()} TECHARANDU. Todos los derechos reservados.
           </span>
         </div>
       </div>

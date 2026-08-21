@@ -1,3 +1,5 @@
+import { useScrollReveal, useStaggeredReveal } from '../hooks/useScrollReveal'
+import { useMouseTilt } from '../hooks/useMouseTilt'
 import './Pillars.css'
 
 const PILLAR_1 = {
@@ -53,8 +55,20 @@ const PILLAR_2 = {
 }
 
 function PillarCard({ pillar }) {
+  const { cardRef, glareRef, handleMouseMove, handleMouseLeave } = useMouseTilt({
+    maxTilt: 6,
+    scale: 1.02,
+    glareMax: 0.12,
+  })
+
   return (
-    <div className={`pillar card pillar--${pillar.accent}`}>
+    <div
+      className={`pillar card tilt-card pillar--${pillar.accent}`}
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="tilt-glare" ref={glareRef} aria-hidden="true" />
       <div className="pillar__header">
         <div className={`pillar__icon-wrap pillar__icon-wrap--${pillar.accent}`} aria-hidden="true">
           <span className="material-symbols-outlined icon-filled">{pillar.icon}</span>
@@ -85,10 +99,17 @@ function PillarCard({ pillar }) {
 }
 
 export default function Pillars() {
+  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal()
+  const { containerRef: gridRef, visibleItems: gridVisible } = useStaggeredReveal(2, { staggerDelay: 150 })
+
   return (
     <section id="pillars" className="pillars">
       <div className="container">
-        <div className="pillars__header">
+
+        <div
+          className={`pillars__header section-reveal${headerVisible ? ' is-visible' : ''}`}
+          ref={headerRef}
+        >
           <span className="section-label">
             <span className="material-symbols-outlined" aria-hidden="true">grid_view</span>
             Nuestros pilares
@@ -100,10 +121,17 @@ export default function Pillars() {
           </p>
         </div>
 
-        <div className="pillars__grid">
-          <PillarCard pillar={PILLAR_1} />
-          <PillarCard pillar={PILLAR_2} />
+        <div className="pillars__grid" ref={gridRef}>
+          {[PILLAR_1, PILLAR_2].map((pillar, i) => (
+            <div
+              key={pillar.title}
+              className={`stagger-item${gridVisible.has(i) ? ' is-visible' : ''}`}
+            >
+              <PillarCard pillar={pillar} />
+            </div>
+          ))}
         </div>
+
       </div>
     </section>
   )

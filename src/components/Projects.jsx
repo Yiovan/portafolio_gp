@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useScrollReveal, useStaggeredReveal } from '../hooks/useScrollReveal'
+import { useMouseTilt } from '../hooks/useMouseTilt'
 import './Projects.css'
 
 const PROJECTS = [
@@ -71,20 +73,66 @@ const PROJECTS = [
 ]
 
 const FILTERS = [
-  { key: 'all', label: 'Todos' },
-  { key: 'digital', label: 'Soluciones Digitales' },
-  { key: 'intelligent', label: 'Tecnología Inteligente' },
+  { key: 'all',         label: 'Todos'                   },
+  { key: 'digital',     label: 'Soluciones Digitales'    },
+  { key: 'intelligent', label: 'Tecnología Inteligente'  },
 ]
+
+function ProjectCard({ project }) {
+  const { cardRef, glareRef, handleMouseMove, handleMouseLeave } = useMouseTilt({
+    maxTilt: 10,
+    scale: 1.04,
+    glareMax: 0.12,
+  })
+  return (
+    <li
+      className="project-card card tilt-card"
+      ref={cardRef}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div className="tilt-glare" ref={glareRef} aria-hidden="true" />
+      <div className="project-card__top">
+        <div className="project-card__icon-wrap" aria-hidden="true">
+          <span className="material-symbols-outlined icon-filled">{project.icon}</span>
+        </div>
+        <span className={`tag ${project.tagVariant}`}>{project.tag}</span>
+      </div>
+      <h3 className="project-card__title">{project.title}</h3>
+      <p className="project-card__desc">{project.description}</p>
+      <div className="project-card__metric">
+        <span className="material-symbols-outlined icon-filled project-card__metric-icon" aria-hidden="true">
+          {project.metric.icon}
+        </span>
+        <span>{project.metric.text}</span>
+      </div>
+      <div className="project-card__tech" aria-label="Tecnologías usadas">
+        {project.tech.map(t => (
+          <span key={t} className="project-card__tech-tag">{t}</span>
+        ))}
+      </div>
+    </li>
+  )
+}
 
 export default function Projects() {
   const [active, setActive] = useState('all')
-
   const filtered = active === 'all' ? PROJECTS : PROJECTS.filter(p => p.category === active)
+
+  const { ref: headerRef, isVisible: headerVisible } = useScrollReveal()
+  const { containerRef: gridRef, visibleItems: gridVisible } = useStaggeredReveal(
+    filtered.length,
+    { staggerDelay: 70 }
+  )
 
   return (
     <section id="projects" className="projects">
       <div className="container">
-        <div className="projects__header">
+
+        <div
+          className={`projects__header section-reveal${headerVisible ? ' is-visible' : ''}`}
+          ref={headerRef}
+        >
           <span className="section-label">
             <span className="material-symbols-outlined" aria-hidden="true">folder_open</span>
             Proyectos
@@ -109,31 +157,17 @@ export default function Projects() {
           ))}
         </div>
 
-        <ul className="projects__grid">
-          {filtered.map((project) => (
-            <li key={project.title} className="project-card card">
-              <div className="project-card__top">
-                <div className="project-card__icon-wrap" aria-hidden="true">
-                  <span className="material-symbols-outlined icon-filled">{project.icon}</span>
-                </div>
-                <span className={`tag ${project.tagVariant}`}>{project.tag}</span>
-              </div>
-              <h3 className="project-card__title">{project.title}</h3>
-              <p className="project-card__desc">{project.description}</p>
-              <div className="project-card__metric">
-                <span className="material-symbols-outlined icon-filled project-card__metric-icon" aria-hidden="true">
-                  {project.metric.icon}
-                </span>
-                <span>{project.metric.text}</span>
-              </div>
-              <div className="project-card__tech" aria-label="Tecnologías usadas">
-                {project.tech.map(t => (
-                  <span key={t} className="project-card__tech-tag">{t}</span>
-                ))}
-              </div>
-            </li>
+        <ul className="projects__grid" ref={gridRef}>
+          {filtered.map((project, i) => (
+            <div
+              key={project.title}
+              className={`stagger-item${gridVisible.has(i) ? ' is-visible' : ''}`}
+            >
+              <ProjectCard project={project} />
+            </div>
           ))}
         </ul>
+
       </div>
     </section>
   )

@@ -25,7 +25,7 @@ export default function Navbar({ theme, onToggleTheme }) {
       <div className="container navbar__inner">
         <a href="#top" className="navbar__logo" aria-label="MBareTech - inicio">
           <span className="navbar__logo-icon material-symbols-outlined icon-filled" aria-hidden="true">hub</span>
-          <span className="navbar__logo-text">MBareTech</span>
+          <span className="navbar__logo-text">TechArandu</span>
         </a>
 
         <nav className={`navbar__nav${menuOpen ? ' navbar__nav--open' : ''}`} aria-label="Navegación principal">

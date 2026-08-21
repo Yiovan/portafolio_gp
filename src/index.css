@@ -180,3 +180,67 @@ section {
   background: var(--accent-2-light);
   color: var(--accent-2);
 }
+
+/* ─────────────────────────────────────────────
+   3D / Parallax / Reveal — clases globales
+───────────────────────────────────────────── */
+
+/* ── Scroll Reveal: sección header ── */
+.section-reveal {
+  opacity: 0;
+  transform: translateY(36px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.section-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Stagger items (hijos de listas/grids) ── */
+.stagger-item {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.stagger-item.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Tilt card — wrapper con perspectiva ── */
+.tilt-card {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+  /* overflow hidden para que el glare no se salga */
+  overflow: hidden;
+}
+
+/* Capa de brillo direccional */
+.tilt-glare {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+  transition: background 0.15s ease;
+}
+
+/* Asegurar que el contenido de la card quede sobre el glare */
+.tilt-card > *:not(.tilt-glare) {
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Animación parallax suave en secciones ── */
+@media (prefers-reduced-motion: reduce) {
+  .section-reveal,
+  .stagger-item {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .tilt-card {
+    transform: none !important;
+  }
+}
