@@ -207,30 +207,6 @@ section {
   transform: translateY(0);
 }
 
-/* ── Tilt card — wrapper con perspectiva ── */
-.tilt-card {
-  position: relative;
-  transform-style: preserve-3d;
-  will-change: transform;
-  /* overflow hidden para que el glare no se salga */
-  overflow: hidden;
-}
-
-/* Capa de brillo direccional */
-.tilt-glare {
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  z-index: 1;
-  transition: background 0.15s ease;
-}
-
-/* Asegurar que el contenido de la card quede sobre el glare */
-.tilt-card > *:not(.tilt-glare) {
-  position: relative;
-  z-index: 2;
-}
 
 /* ── Animación parallax suave en secciones ── */
 @media (prefers-reduced-motion: reduce) {
