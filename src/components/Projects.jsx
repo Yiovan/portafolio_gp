@@ -1,9 +1,20 @@
 import { useState } from 'react'
 import { useScrollReveal, useStaggeredReveal } from '../hooks/useScrollReveal'
-import { useMouseTilt } from '../hooks/useMouseTilt'
 import './Projects.css'
 
 const PROJECTS = [
+  {
+    category: 'digital',
+    tag: 'E-commerce',
+    tagVariant: '',
+    icon: 'shopping_bag',
+    title: 'Charlotte Boutique',
+    description:
+      'Tienda online de moda con catálogo dinámico, carrito de compras, integración de pagos y panel de administración para gestión de productos e inventario.',
+    tech: ['React', 'Node.js', 'Stripe'],
+    metric: { icon: 'storefront', text: 'Tienda online operativa' },
+    link: 'https://charlotte-boutique.com',
+  },
   {
     category: 'digital',
     tag: 'Desarrollo Web',
@@ -79,19 +90,8 @@ const FILTERS = [
 ]
 
 function ProjectCard({ project }) {
-  const { cardRef, glareRef, handleMouseMove, handleMouseLeave } = useMouseTilt({
-    maxTilt: 10,
-    scale: 1.04,
-    glareMax: 0.12,
-  })
   return (
-    <li
-      className="project-card card tilt-card"
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-    >
-      <div className="tilt-glare" ref={glareRef} aria-hidden="true" />
+    <li className="project-card card">
       <div className="project-card__top">
         <div className="project-card__icon-wrap" aria-hidden="true">
           <span className="material-symbols-outlined icon-filled">{project.icon}</span>
