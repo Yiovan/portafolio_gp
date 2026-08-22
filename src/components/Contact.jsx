@@ -5,20 +5,20 @@ const CONTACT_ITEMS = [
   {
     icon: 'mail',
     label: 'Email',
-    value: 'hola@mbaretech.com',
-    href: 'mailto:hola@mbaretech.com',
-  },
+    value: 'giovannicabrerarivas@outlook.com',
+    href: 'giovannicabrerarivas@outlook.com',
+  }, /* mejorar el enlance del correo, redirige a la pagina misma */
   {
     icon: 'chat',
     label: 'WhatsApp',
     value: 'Escribenos directo',
-    href: 'https://wa.me/595981000000',
+    href: 'https://wa.me/595986173023',
   },
   {
     icon: 'work',
     label: 'LinkedIn',
     value: 'linkedin.com/company/mbaretech',
-    href: 'https://linkedin.com/company/mbaretech',
+    href: 'https://www.linkedin.com/in/giovanni-cabrera-rivas-637481279/',
   },
 ]
 
