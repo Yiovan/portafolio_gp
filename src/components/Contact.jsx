@@ -40,6 +40,7 @@ const EMAILJS_READY = Boolean(
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', service: '', message: '' })
   const [status, setStatus] = useState(null) // null | 'sending' | 'sent' | 'error'
+  const [errorMsg, setErrorMsg] = useState('')
 
   const handleChange = (e) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
@@ -69,6 +70,7 @@ export default function Contact() {
       setForm({ name: '', email: '', service: '', message: '' })
     } catch (err) {
       console.error('EmailJS error:', err)
+      setErrorMsg(err?.text || err?.message || 'Error desconocido')
       setStatus('error')
     }
   }
@@ -124,94 +126,22 @@ export default function Contact() {
               </div>
               <h3>Mensaje enviado</h3>
               <p>Gracias por escribirnos. Te respondemos pronto.</p>
-              <button className="btn btn-outline" onClick={() => setStatus(null)}>
-                Enviar otro mensaje
-              </button>
+              
             </div>
           ) : (
-            <form className="contact__form" onSubmit={handleSubmit} noValidate>
-              <h3 className="contact__form-title">Enviar mensaje</h3>
+            <form>
+              
 
-              {status === 'error' && (
-                <div className="contact__form-error" role="alert">
-                  No pudimos enviar tu mensaje. Intentalo de nuevo o escribinos a {CONTACT_EMAIL}.
-                </div>
-              )}
+              
 
-              <div className="contact__field">
-                <label htmlFor="contact-name">Nombre</label>
-                <input
-                  id="contact-name"
-                  type="text"
-                  name="name"
-                  value={form.name}
-                  onChange={handleChange}
-                  placeholder="Tu nombre completo"
-                  required
-                  autoComplete="name"
-                />
-              </div>
+              
 
-              <div className="contact__field">
-                <label htmlFor="contact-email">Email</label>
-                <input
-                  id="contact-email"
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  placeholder="tu@email.com"
-                  required
-                  autoComplete="email"
-                />
-              </div>
+              
+            <h3>verificar despues</h3>
 
-              <div className="contact__field">
-                <label htmlFor="contact-service">Servicio de interés</label>
-                <select
-                  id="contact-service"
-                  name="service"
-                  value={form.service}
-                  onChange={handleChange}
-                >
-                  <option value="">Selecciona un servicio</option>
-                  {SERVICES_OPTIONS.map(s => (
-                    <option key={s} value={s}>{s}</option>
-                  ))}
-                </select>
-              </div>
+              
 
-              <div className="contact__field">
-                <label htmlFor="contact-message">Mensaje</label>
-                <textarea
-                  id="contact-message"
-                  name="message"
-                  value={form.message}
-                  onChange={handleChange}
-                  placeholder="Describí brevemente tu proyecto o consulta..."
-                  rows={4}
-                  required
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="btn btn-primary contact__submit"
-                disabled={status === 'sending'}
-                aria-busy={status === 'sending'}
-              >
-                {status === 'sending' ? (
-                  <>
-                    <span className="material-symbols-outlined contact__spinner" aria-hidden="true">refresh</span>
-                    Enviando...
-                  </>
-                ) : (
-                  <>
-                    <span className="material-symbols-outlined" aria-hidden="true">send</span>
-                    Enviar mensaje
-                  </>
-                )}
-              </button>
+              
             </form>
           )}
         </div>
