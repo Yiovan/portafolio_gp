@@ -1,13 +1,15 @@
 import { useState } from 'react'
+import emailjs from '@emailjs/browser'
 import './Contact.css'
+import { EMAILJS_CONFIG, CONTACT_EMAIL } from '../config/emailjs'
 
 const CONTACT_ITEMS = [
   {
     icon: 'mail',
     label: 'Email',
-    value: 'giovannicabrerarivas@outlook.com',
-    href: 'giovannicabrerarivas@outlook.com',
-  }, /* mejorar el enlance del correo, redirige a la pagina misma */
+    value: 'contactos.techarandu@gmail.com',
+    href: 'mailto:contactos.techarandu@gmail.com',
+  },
   {
     icon: 'chat',
     label: 'WhatsApp',
@@ -31,6 +33,10 @@ const SERVICES_OPTIONS = [
   'Consultoría Tecnológica',
 ]
 
+const EMAILJS_READY = Boolean(
+  EMAILJS_CONFIG.serviceId && EMAILJS_CONFIG.templateId && EMAILJS_CONFIG.publicKey
+)
+
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', service: '', message: '' })
   const [status, setStatus] = useState(null) // null | 'sending' | 'sent' | 'error'
@@ -39,14 +45,32 @@ export default function Contact() {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+    if (!EMAILJS_READY) {
+      setStatus('error')
+      return
+    }
     setStatus('sending')
-    // Simulated send — replace with real API call
-    setTimeout(() => {
+    try {
+      await emailjs.send(
+        EMAILJS_CONFIG.serviceId,
+        EMAILJS_CONFIG.templateId,
+        {
+          from_name: form.name,
+          reply_to: form.email,
+          service: form.service,
+          message: form.message,
+          to_email: CONTACT_EMAIL,
+        },
+        { publicKey: EMAILJS_CONFIG.publicKey }
+      )
       setStatus('sent')
       setForm({ name: '', email: '', service: '', message: '' })
-    }, 1200)
+    } catch (err) {
+      console.error('EmailJS error:', err)
+      setStatus('error')
+    }
   }
 
   return (
@@ -82,7 +106,18 @@ export default function Contact() {
         </div>
 
         <div className="contact__form-wrap card" aria-label="Formulario de contacto">
-          {status === 'sent' ? (
+          {!EMAILJS_READY ? (
+            <div className="contact__success" role="status">
+              <div className="contact__success-icon" aria-hidden="true">
+                <span className="material-symbols-outlined icon-filled">error</span>
+              </div>
+              <h3>Formulario sin configurar</h3>
+              <p>
+                Agregá las credenciales de EmailJS en el archivo <strong>.env</strong>.
+                Mientras tanto, escribinos a {CONTACT_EMAIL}.
+              </p>
+            </div>
+          ) : status === 'sent' ? (
             <div className="contact__success" role="status" aria-live="polite">
               <div className="contact__success-icon" aria-hidden="true">
                 <span className="material-symbols-outlined icon-filled">check_circle</span>
@@ -96,6 +131,12 @@ export default function Contact() {
           ) : (
             <form className="contact__form" onSubmit={handleSubmit} noValidate>
               <h3 className="contact__form-title">Enviar mensaje</h3>
+
+              {status === 'error' && (
+                <div className="contact__form-error" role="alert">
+                  No pudimos enviar tu mensaje. Intentalo de nuevo o escribinos a {CONTACT_EMAIL}.
+                </div>
+              )}
 
               <div className="contact__field">
                 <label htmlFor="contact-name">Nombre</label>

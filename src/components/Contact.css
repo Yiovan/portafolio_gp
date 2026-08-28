@@ -144,6 +144,15 @@
   min-height: 100px;
 }
 
+.contact__form-error {
+  font-size: 13px;
+  color: #dc2626;
+  background: color-mix(in srgb, #dc2626 8%, transparent);
+  border: 1px solid color-mix(in srgb, #dc2626 30%, transparent);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+
 .contact__submit {
   width: 100%;
   justify-content: center;
