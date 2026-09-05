@@ -129,7 +129,7 @@ export default function Contact() {
               
             </div>
           ) : (
-            <form>
+            
               
 
               
@@ -137,12 +137,12 @@ export default function Contact() {
               
 
               
-            <h3>verificar despues</h3>
+            <h3></h3>
 
               
 
               
-            </form>
+            
           )}
         </div>
       </div>
